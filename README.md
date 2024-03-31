@@ -1,4 +1,4 @@
-# create_venv.bat
+# venv_create.bat
 1. Copy this .bat-file to the folder where you want to create a new python environment and run it.
 2. It will list the versions of pythons it detects on your computer. Choose one.
 3. It will ask you for the venv name. Use the default or choose your own.
@@ -8,7 +8,7 @@
 
 https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56
 
-# create_venv_simple.bat
+# venv_create_simple.bat
 1. Copy this .bat-file to the folder where you want to create a new python environment and run it.
 2. It will ask you for the venv name. Use the default or choose your own.
 3. It will then place you inside the venv, and create an "activate_venv" for you to enter the venv again in the future.
