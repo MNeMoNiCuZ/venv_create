@@ -1,18 +1,41 @@
-# venv_create.bat
-1. Copy this .bat-file to the folder where you want to create a new python environment and run it.
-2. It will list the versions of pythons it detects on your computer. Choose one. Default is `1`.
-3. It will ask you for the venv name. Use the default `venv` or choose your own.
-4. It will ask if you want to upgrade pip. Default is `Yes`.
-5. It will then place you inside the venv, and create an "activate_venv" for you to enter the venv again in the future.
+# Create Virtual Environment Scripts
 
-![image](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/ee9212d5-6e27-4e0c-ac16-3ed4e2fd4481)
+This repository provides two batch scripts designed to simplify the creation and management of Python virtual environments on your system. With these scripts, you can quickly set up a new Python environment with just a few clicks, streamlining your development workflow.
 
-https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56
+## venv_create.bat
 
-# venv_create_simple.bat
-1. Copy this .bat-file to the folder where you want to create a new python environment and run it.
-2. It will ask you for the venv name. Use the default or choose your own.
-3. It will then place you inside the venv, and create an "activate_venv" for you to enter the venv again in the future.
+A comprehensive script that detects installed Python versions, allows custom naming of your virtual environment, offers an option to upgrade pip, and automatically places you inside the newly created environment.
 
-To choose which version of python to use, edit line 10 to your python version
-![image](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/952617c8-2579-4d61-a8c3-cec205c5c4ee)
+### How to Use:
+1. **Download and Place the Script**: Download `venv_create.bat` and place it in your desired directory.
+2. **Run the Script**: Double-click the script to execute. It will display available Python versions for selection. The default selection is `1`.
+3. **Name Your Environment**: Enter a name for your virtual environment when prompted. The default name is `venv`.
+4. **Upgrade pip (Optional)**: Choose whether to upgrade pip. The default option is `Yes`.
+5. **Access Your Environment**: Upon completion, the script places you inside the virtual environment and creates an `activate_venv` script for re-entry in the future.
+
+### Screenshots:
+
+![venv_create.bat process](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/ee9212d5-6e27-4e0c-ac16-3ed4e2fd4481)
+
+[![venv_create.bat completion](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56)](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56
+)
+
+## venv_create_simple.bat
+
+A streamlined version of the script for quick setup, skipping Python version selection and focusing on creating a virtual environment directly.
+
+### How to Use:
+1. **Download and Place the Script**: Obtain `venv_create_simple.bat` and place it in the target directory.
+2. **Run the Script**: Execute the script. You will be prompted to name your virtual environment, with a default option provided.
+3. **Access Your Environment**: The script will finalize the environment creation and provide an `activate_venv` script for easy access in the future.
+
+#### Customizing Python Version:
+To specify a Python version, edit line 10 of `venv_create_simple.bat` with your desired version.
+
+### Screenshot:
+
+![venv_create_simple.bat usage](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/952617c8-2579-4d61-a8c3-cec205c5c4ee)
+
+---
+
+By utilizing these scripts, developers can efficiently manage their Python environments, enhancing productivity and focusing more on development tasks.
