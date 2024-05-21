@@ -11,7 +11,8 @@ A comprehensive script that detects installed Python versions, allows custom nam
 2. **Run the Script**: Double-click the script to execute. It will display available Python versions for selection. The default selection is `1`.
 3. **Name Your Environment**: Enter a name for your virtual environment when prompted. The default name is `venv`.
 4. **Upgrade pip (Optional)**: Choose whether to upgrade pip. The default option is `Yes`.
-5. **Access Your Environment**: Upon completion, the script places you inside the virtual environment and creates an `activate_venv` script for re-entry in the future.
+5. **Install requirements.txt (Optional)**: Choose whether to run a `pip install -r requirements.txt` command in your new venv. The default option is `Yes`.
+6. **Access Your Environment**: Upon completion, the script places you inside the virtual environment and creates an `activate_venv` script for re-entry in the future.
 
 ### Screenshots:
 
