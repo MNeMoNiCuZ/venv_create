@@ -4,7 +4,7 @@ This repository provides two batch scripts designed to simplify the creation and
 
 ## venv_create.bat
 
-A comprehensive script that detects installed Python versions, allows custom naming of your virtual environment, offers an option to upgrade pip, and automatically places you inside the newly created environment.
+A script that detects installed Python versions, allows custom naming of your virtual environment, offers an option to upgrade pip, and automatically places you inside the newly created environment.
 
 ### How to Use:
 1. **Download and Place the Script**: Download `venv_create.bat` and place it in your desired directory.
@@ -15,8 +15,7 @@ A comprehensive script that detects installed Python versions, allows custom nam
 6. **Access Your Environment**: Upon completion, the script places you inside the virtual environment and creates an `activate_venv` script for re-entry in the future.
 
 ### Screenshots:
-
-![venv_create.bat process](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/ee9212d5-6e27-4e0c-ac16-3ed4e2fd4481)
+![image](https://github.com/MNeMoNiCuZ/venv_create/assets/60541708/4e4db5a9-40e7-40a0-b309-7d23714925e1)
 
 [![venv_create.bat completion](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56)](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56
 )
