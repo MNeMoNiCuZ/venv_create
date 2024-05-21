@@ -4,13 +4,14 @@ setlocal enabledelayedexpansion
 :: Initialize counter
 set COUNT=0
 
-:: Directly parse the output of `py -0`
-for /f "tokens=*" %%a in ('py -0') do (
-    :: Filter lines that start with a dash, indicating a Python version
+:: Directly parse the output of `py -0p` to get versions and their paths
+for /f "tokens=1,*" %%a in ('py -0p') do (
+    :: Filter lines that start with a dash, indicating a Python version, and capture the path
     echo %%a | findstr /R "^[ ]*-" > nul && (
         set /a COUNT+=1
         set "PYTHON_VER_!COUNT!=%%a"
-        echo !COUNT!. %%a
+        set "PYTHON_PATH_!COUNT!=%%b"  :: Store the path in a separate variable
+        echo !COUNT!. %%a at %%b
     )
 )
 
@@ -68,7 +69,7 @@ echo call "%VENV_NAME%\Scripts\activate"
 echo python -m pip install --upgrade pip
 echo echo Pip has been upgraded in the virtual environment %VENV_NAME%.
 echo echo To deactivate, manually type 'deactivate'.
-echo cmd /k
+echo call "%VENV_NAME%\Scripts\activate"
 ) > venv_update.bat
 
 :: Ask the user if they want to upgrade pip now
@@ -78,12 +79,40 @@ if not defined UPGRADE_NOW set UPGRADE_NOW=Y
 if /I "%UPGRADE_NOW%"=="Y" (
     echo Upgrading pip and activating the virtual environment...
     call venv_update.bat
-) else (
-    echo Activating the virtual environment without upgrading pip...
-    call venv_activate.bat
 )
 
+:: Ensure we are in the virtual environment
+echo.
+call "%VENV_NAME%\Scripts\activate"
+
+:: Check if requirements.txt exists
+if exist requirements.txt (
+    echo requirements.txt found.
+    :: Ask the user if they want to install requirements
+    set /p INSTALL_REQUIREMENTS="Do you wish to run 'pip install -r requirements.txt'? (Y/N) (Press Enter for default 'Y'): "
+    if "!INSTALL_REQUIREMENTS!"=="" set INSTALL_REQUIREMENTS=Y
+    echo User selected: !INSTALL_REQUIREMENTS!
+    if /I "!INSTALL_REQUIREMENTS!"=="Y" (
+        echo Installing requirements from requirements.txt...
+        call "%VENV_NAME%\Scripts\activate"  :: Ensure the virtual environment is active
+        pip install -r requirements.txt
+        echo Requirements installed.
+    ) else (
+        echo Skipping requirements installation.
+    )
+) else (
+    echo requirements.txt not found. Skipping requirements installation.
+)
+
+:: List installed packages
+echo Listing installed packages...
+pip list
+
 echo Setup complete. Your virtual environment is ready.
+echo To deactivate the virtual environment, type 'deactivate'.
+
+:: Keep the command prompt open
+cmd /k
 
 :: After completing the main part of the script, jump to cleanup
 goto cleanup
