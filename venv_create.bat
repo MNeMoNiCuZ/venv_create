@@ -5,7 +5,7 @@ setlocal enabledelayedexpansion
 set COUNT=0
 
 :: Directly parse the output of `py -0p` to get versions and their paths
-for /f "tokens=1,*" %%a in ('py -0p') do (
+for /f "tokens=1,* delims=" %%a in ('py -0p') do (
     :: Filter lines that start with a dash, indicating a Python version, and capture the path
     echo %%a | findstr /R "^[ ]*-" > nul && (
         set /a COUNT+=1
@@ -28,10 +28,14 @@ if "!PYTHON_SELECTION!"=="" set PYTHON_SELECTION=1
 :: Extract the selected Python version tag and parse the version number more accurately
 set SELECTED_PYTHON_VER=!PYTHON_VER_%PYTHON_SELECTION%!
 
-:: The version string is expected to be in the format "-V:X.Y *"
-:: We'll use a for loop to extract just the "X.Y" part
-for /f "tokens=2 delims=: " %%i in ("!SELECTED_PYTHON_VER!") do (
+:: Use a for loop to extract just the "X.Y" part or the "3.12" part
+for /f "tokens=2 delims=-" %%i in ("!SELECTED_PYTHON_VER!") do (
     set "SELECTED_PYTHON_VER=%%i"
+)
+
+:: Further refine to remove any trailing characters (like "-64")
+for /f "tokens=1 delims= " %%j in ("!SELECTED_PYTHON_VER!") do (
+    set "SELECTED_PYTHON_VER=%%j"
 )
 
 :: Confirm the selected Python version
@@ -44,7 +48,7 @@ if "!VENV_NAME!"=="" set VENV_NAME=venv
 
 :: Create the virtual environment using the selected Python version
 echo Creating virtual environment named %VENV_NAME%...
-py -%SELECTED_PYTHON_VER% -m venv %VENV_NAME%
+py -%SELECTED_PYTHON_VER% -m venv "%VENV_NAME%"
 
 :: Generate the venv_activate.bat file
 echo Generating venv_activate.bat...
