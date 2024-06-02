@@ -9,7 +9,14 @@ for /f "tokens=1,*" %%a in ('py -0p') do (
     :: Filter lines that start with a dash, indicating a Python version, and capture the path
     echo %%a | findstr /R "^[ ]*-" > nul && (
         set /a COUNT+=1
-        set "PYTHON_VER_!COUNT!=%%a"
+        ::set "PYTHON_VER_!COUNT!=%%a"
+        set "pythonVersion=%%a"
+        :: a quick, dirty but understandable solution
+        set "pythonVersion=!pythonVersion:-32=!"
+        set "pythonVersion=!pythonVersion:-64=!"
+        set "pythonVersion=!pythonVersion:-=!"
+        set "pythonVersion=!pythonVersion:V:=!"
+        set "PYTHON_VER_!COUNT!=!pythonVersion!"
         set "PYTHON_PATH_!COUNT!=%%b"  :: Store the path in a separate variable
         echo !COUNT!. %%a at %%b
     )
@@ -27,12 +34,6 @@ if "!PYTHON_SELECTION!"=="" set PYTHON_SELECTION=1
 
 :: Extract the selected Python version tag and parse the version number more accurately
 set SELECTED_PYTHON_VER=!PYTHON_VER_%PYTHON_SELECTION%!
-
-:: The version string is expected to be in the format "-V:X.Y *"
-:: We'll use a for loop to extract just the "X.Y" part
-for /f "tokens=2 delims=:- " %%i in ("!SELECTED_PYTHON_VER!") do (
-    set "SELECTED_PYTHON_VER=%%i"
-)
 
 :: Confirm the selected Python version
 echo Using Python version %SELECTED_PYTHON_VER%
