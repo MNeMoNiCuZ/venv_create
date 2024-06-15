@@ -9,7 +9,6 @@ for /f "tokens=1,*" %%a in ('py -0p') do (
     :: Filter lines that start with a dash, indicating a Python version, and capture the path
     echo %%a | findstr /R "^[ ]*-" > nul && (
         set /a COUNT+=1
-        ::set "PYTHON_VER_!COUNT!=%%a"
         set "pythonVersion=%%a"
         :: a quick, dirty but understandable solution
         set "pythonVersion=!pythonVersion:-32=!"
@@ -95,17 +94,42 @@ if /I "%UPGRADE_NOW%"=="Y" (
 echo.
 call "%VENV_NAME%\Scripts\activate"
 
+:: Ask the user if they want to install uv
+echo.
+set INSTALL_UV=Y
+echo uv pip package installer:
+echo uv is a Python package that provides enhanced capabilities for managing Python environments and dependencies.
+set /p INSTALL_UV="Do you want to install 'uv' package? (Y/N) (Press Enter for default 'Y'): "
+if "!INSTALL_UV!"=="" set INSTALL_UV=Y
+set INSTALL_UV=!INSTALL_UV:~0,1!
+
+if /I "!INSTALL_UV!"=="Y" (
+    echo Installing 'uv' package...
+    pip install uv
+    set UV_INSTALLED=1
+) else (
+    set UV_INSTALLED=0
+)
+
 :: Check if requirements.txt exists
 if exist requirements.txt (
     echo requirements.txt found.
     :: Ask the user if they want to install requirements
-    set /p INSTALL_REQUIREMENTS="Do you wish to run 'pip install -r requirements.txt'? (Y/N) (Press Enter for default 'Y'): "
+    if "!UV_INSTALLED!"=="1" (
+        set /p INSTALL_REQUIREMENTS="Do you wish to run 'uv pip install -r requirements.txt'? (Y/N) (Press Enter for default 'Y'): "
+    ) else (
+        set /p INSTALL_REQUIREMENTS="Do you wish to run 'pip install -r requirements.txt'? (Y/N) (Press Enter for default 'Y'): "
+    )
     if "!INSTALL_REQUIREMENTS!"=="" set INSTALL_REQUIREMENTS=Y
     echo User selected: !INSTALL_REQUIREMENTS!
     if /I "!INSTALL_REQUIREMENTS!"=="Y" (
         echo Installing requirements from requirements.txt...
         call "%VENV_NAME%\Scripts\activate"  :: Ensure the virtual environment is active
-        pip install -r requirements.txt
+        if "!UV_INSTALLED!"=="1" (
+            uv pip install -r requirements.txt
+        ) else (
+            pip install -r requirements.txt
+        )
         echo Requirements installed.
     ) else (
         echo Skipping requirements installation.
