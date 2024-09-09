@@ -37,71 +37,35 @@ if not cuda_version:
 print(f"Detected Python version: {python_version}")
 print(f"Detected CUDA version: {cuda_version}")
 
-# Helper function to construct the correct wheel filename with Python version twice
-def get_wheel_filename(package_name, version, python_version, cuda_version):
-    # Python version appears twice in the filename as per your existing files
-    return f"{package_name}-{version}+{cuda_version}-{python_version}-{python_version}-win_amd64.whl"
+# Helper function to check if a wheel is cached
+def is_wheel_cached(package_name):
+    wheel_files = os.listdir(CACHE_DIR)
+    for wheel_file in wheel_files:
+        if package_name in wheel_file:
+            print(f"Found cached version of {package_name} at {os.path.join(CACHE_DIR, wheel_file)}.")
+            return os.path.join(CACHE_DIR, wheel_file)
+    print(f"No cached version of {package_name} found.")
+    return None
 
-# Helper function to check if a wheel exists in the cache
-def is_wheel_in_cache(package_name, version, python_version, cuda_version):
-    wheel_filename = get_wheel_filename(package_name, version, python_version, cuda_version)
-    wheel_path = os.path.join(CACHE_DIR, wheel_filename)
-    print(f"Searching for a local cache of {package_name} at: {wheel_path}...")
-    if os.path.exists(wheel_path):
-        print(f"Found local cache for {package_name}.")
-        return wheel_path
+# Helper function to install package, uses cache if available
+def install_package(package_name):
+    if is_wheel_cached(package_name):
+        print(f"Installing {package_name} from cache...")
     else:
-        print(f"Local cache of {package_name} not found.")
-        return None
-
-# Helper function to download a wheel if it's not already cached
-def download_wheel(package_name, version, python_version, cuda_version):
-    index_url = f"{BASE_URL}/{cuda_version}"
-    wheel_filename = get_wheel_filename(package_name, version, python_version, cuda_version)
-    wheel_path = os.path.join(CACHE_DIR, wheel_filename)
-
-    print(f"Will download {package_name} from {index_url} to {wheel_path}...")
-
-    pip_download_command = [
-        sys.executable, "-m", "pip", "download", package_name,
-        f"--index-url={index_url}",
-        "--no-deps",  # We only want the specific package, not dependencies
-        "--dest", CACHE_DIR  # Save the wheel to the cache directory
-    ]
-
-    result = subprocess.run(pip_download_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    if result.returncode == 0:
-        print(f"Downloaded {package_name} to {wheel_path}")
-    else:
-        print(f"Failed to download {package_name}. Error: {result.stderr}")
-        sys.exit(1)
-
-# Check for all wheels first and print the status of each one
-def check_all_wheels(python_version, cuda_version):
-    packages = {
-        "torch": "2.4.1",
-        "torchvision": "0.19.1",
-        "torchaudio": "2.4.1"
-    }
-
-    missing_packages = []
-
-    for package, version in packages.items():
-        wheel_path = is_wheel_in_cache(package, version, python_version, cuda_version)
-        if wheel_path:
-            # If wheel is found, no need to download
-            continue
+        print(f"Downloading and installing the latest version of {package_name}...")
+        pip_install_command = [
+            sys.executable, "-m", "pip", "install", package_name,
+            f"--index-url={BASE_URL}/{cuda_version}"
+        ]
+        result = subprocess.run(pip_install_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.returncode == 0:
+            print(f"Successfully installed {package_name}.")
         else:
-            # If not found, mark it for download
-            missing_packages.append((package, version))
+            print(f"Failed to install {package_name}. Error: {result.stderr}")
+            sys.exit(1)
 
-    return missing_packages
+# Install the required packages (torch, torchvision, torchaudio)
+for package in ["torch", "torchvision", "torchaudio"]:
+    install_package(package)
 
-# First check all wheels
-missing_packages = check_all_wheels(python_version, cuda_version)
-
-# Then download any missing wheels
-for package, version in missing_packages:
-    download_wheel(package, version, python_version, cuda_version)
-
-print("Downloads completed. Now proceed to install using the appropriate command (pip or uv pip).")
+print("Installation completed successfully!")
