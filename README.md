@@ -14,11 +14,12 @@ A script that detects installed Python versions, allows custom naming of your vi
 5. **Install requirements.txt (Optional)**: Choose whether to run a `pip install -r requirements.txt` command in your new venv. The default option is `Yes`.
 6. **Access Your Environment**: Upon completion, the script places you inside the virtual environment and creates an `activate_venv` script for re-entry in the future.
 
-### Screenshots:
-![image](https://github.com/MNeMoNiCuZ/venv_create/assets/60541708/4e4db5a9-40e7-40a0-b309-7d23714925e1)
+### Screenshot:
+![image](https://github.com/user-attachments/assets/b1a525b7-6f24-4cc8-8338-4d0c8597e0ab)
 
-[![venv_create.bat completion](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56)](https://github.com/MNeMoNiCuZ/create_venv/assets/60541708/5ea123aa-b59f-4c99-8c98-c3d9aec3ac56
-)
+### Video Demonstration of setting up a venv
+https://github.com/user-attachments/assets/5622e4c3-9782-49e3-bede-df558e2eda23
+
 
 ## venv_create_simple.bat
 
@@ -63,6 +64,11 @@ Any time you want to install a requirements.txt-file, all you can instead run on
 * Type `torch` to run the `torchinstall.py` script, which will check which version of CUDA you have installed, and then install pytorch with CUDA support. It caches the pytorch and reuses the cache for fast installations in the future.
 
 * Type `uvtorch` to do the same as **torch** but install it with `uv`, which installs it faster.
+
+### Video demonstration of installing pytorch
+
+https://github.com/user-attachments/assets/500bc3be-f160-4ba1-a3d1-798f56114930
+
 
 ---
 
